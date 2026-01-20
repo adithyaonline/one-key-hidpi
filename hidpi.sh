@@ -716,21 +716,50 @@ function end() {
 # custom resolution
 function custom_res() {
     echo "${langCustomRes}"
-    read -p ":" input_resolutions
-    
+    read -r -p ":" input_resolutions
+
+    # Normalise resolution separators and letter casing.
+    input_resolutions=${input_resolutions//×/x}
+    input_resolutions=${input_resolutions//X/x}
+
     # Split the input into an array
     IFS=' ' read -r -a resolution_array <<< "$input_resolutions"
-    
+
     # Call the create_res function with the array elements
     create_res "${resolution_array[@]}"
 }
 
 # create resolution
+function parse_resolution() {
+    local res="$1"
+    local width_part
+    local height_part
+
+    width_part=$(printf '%s' "${res}" | cut -d x -f 1)
+    height_part=$(printf '%s' "${res}" | cut -d x -f 2)
+
+    if [[ -z "${width_part}" || -z "${height_part}" ]]; then
+        echo "${langEnterError}"
+        exit 1
+    fi
+
+    if ! [[ "${width_part}" =~ ^[0-9]+$ && "${height_part}" =~ ^[0-9]+$ ]]; then
+        echo "${langEnterError}"
+        exit 1
+    fi
+
+    RES_WIDTH=${width_part}
+    RES_HEIGHT=${height_part}
+}
+
 function create_res() {
-    for res in $@; do
-        width=$(echo ${res} | cut -d x -f 1)
-        height=$(echo ${res} | cut -d x -f 2)
-        hidpi=$(printf '%08x %08x' $((${width} * 2)) $((${height} * 2)) | xxd -r -p | base64)
+    for res in "$@"; do
+        parse_resolution "${res}"
+        width=${RES_WIDTH}
+        height=${RES_HEIGHT}
+        width_twice=$((width * 2))
+        height_twice=$((height * 2))
+        hidpi=$(printf '%08x %08x' "${width_twice}" "${height_twice}" | xxd -r -p | base64)
         #
         cat <<OOO >>${dpiFile}
                 <data>${hidpi:0:11}AAAAB</data>
@@ -740,10 +769,13 @@ OOO
 }
 
 function create_res_1() {
-    for res in $@; do
-        width=$(echo ${res} | cut -d x -f 1)
-        height=$(echo ${res} | cut -d x -f 2)
-        hidpi=$(printf '%08x %08x' $((${width} * 2)) $((${height} * 2)) | xxd -r -p | base64)
+    for res in "$@"; do
+        parse_resolution "${res}"
+        width=${RES_WIDTH}
+        height=${RES_HEIGHT}
+        width_twice=$((width * 2))
+        height_twice=$((height * 2))
+        hidpi=$(printf '%08x %08x' "${width_twice}" "${height_twice}" | xxd -r -p | base64)
         #
         cat <<OOO >>${dpiFile}
                 <data>${hidpi:0:11}A</data>
@@ -752,10 +784,13 @@ OOO
 }
 
 function create_res_2() {
-    for res in $@; do
-        width=$(echo ${res} | cut -d x -f 1)
-        height=$(echo ${res} | cut -d x -f 2)
-        hidpi=$(printf '%08x %08x' $((${width} * 2)) $((${height} * 2)) | xxd -r -p | base64)
+    for res in "$@"; do
+        parse_resolution "${res}"
+        width=${RES_WIDTH}
+        height=${RES_HEIGHT}
+        width_twice=$((width * 2))
+        height_twice=$((height * 2))
+        hidpi=$(printf '%08x %08x' "${width_twice}" "${height_twice}" | xxd -r -p | base64)
         #
         cat <<OOO >>${dpiFile}
                 <data>${hidpi:0:11}AAAABACAAAA==</data>
@@ -764,10 +799,13 @@ OOO
 }
 
 function create_res_3() {
-    for res in $@; do
-        width=$(echo ${res} | cut -d x -f 1)
-        height=$(echo ${res} | cut -d x -f 2)
-        hidpi=$(printf '%08x %08x' $((${width} * 2)) $((${height} * 2)) | xxd -r -p | base64)
+    for res in "$@"; do
+        parse_resolution "${res}"
+        width=${RES_WIDTH}
+        height=${RES_HEIGHT}
+        width_twice=$((width * 2))
+        height_twice=$((height * 2))
+        hidpi=$(printf '%08x %08x' "${width_twice}" "${height_twice}" | xxd -r -p | base64)
         #
         cat <<OOO >>${dpiFile}
                 <data>${hidpi:0:11}AAAAB</data>
@@ -776,10 +814,13 @@ OOO
 }
 
 function create_res_4() {
-    for res in $@; do
-        width=$(echo ${res} | cut -d x -f 1)
-        height=$(echo ${res} | cut -d x -f 2)
-        hidpi=$(printf '%08x %08x' $((${width} * 2)) $((${height} * 2)) | xxd -r -p | base64)
+    for res in "$@"; do
+        parse_resolution "${res}"
+        width=${RES_WIDTH}
+        height=${RES_HEIGHT}
+        width_twice=$((width * 2))
+        height_twice=$((height * 2))
+        hidpi=$(printf '%08x %08x' "${width_twice}" "${height_twice}" | xxd -r -p | base64)
         #
         cat <<OOO >>${dpiFile}
                 <data>${hidpi:0:11}AAAAJAKAAAA==</data>
