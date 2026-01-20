@@ -2,7 +2,6 @@
 
 ## Explanation
 
-[English](README.md) | [中文](README-zh.md)
 
  This script can simulate macOS HiDPI on a non-retina display, and have a "Native" Scaled in System Preferences.
 
@@ -21,7 +20,7 @@ System Preferences
 1.Remote Mode: Run this script in Terminal
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/xzhih/one-key-hidpi/master/hidpi.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/adithyaonline/one-key-hidpi/master/hidpi.sh)"
 ```
 
 2.Local Mode: Download ZIP, decompressing it, and double click `hidpi.command` to run
